@@ -19,14 +19,14 @@ export default function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("http://localhost:3000/products");
+        const response = await fetch("http://localhost:3000/products");
         // console.log(typeof response);
         console.log(response);
-        if (response.status !== 200) throw new Error("Có lỗi khi lấy dữ liệu");
+        if (!response.ok) throw new Error("Có lỗi khi lấy dữ liệu");
 
-        // const data = await response.json();
+        const data = await response.json();
         // console.log(data);
-        setProducts(response.data);
+        setProducts(data);
       } catch (error) {
         alert(error.message);
       }
