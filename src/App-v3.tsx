@@ -1,16 +1,11 @@
-import { useEffect, useState } from "react";
+import { ReactDOM, useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import axios from "axios";
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
-
 export default function App() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isShow, setIsShow] = useState<boolean>(false);
+  const [products, setProducts] = useState([]);
+  const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,7 +19,7 @@ export default function App() {
         // console.log(data);
         setProducts(response.data);
       } catch (error) {
-        alert((error as Error).message);
+        alert(error.message);
       }
     }
     fetchData();
@@ -64,12 +59,7 @@ export default function App() {
   );
 }
 
-interface ItemProps {
-  name: string;
-  price: number;
-}
-
-function Item({ name, price }: ItemProps) {
+function Item({ name, price }) {
   return (
     <tr>
       <td>{name}</td>
