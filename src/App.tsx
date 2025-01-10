@@ -1,6 +1,7 @@
 import { ReactDOM, useEffect, useState } from "react";
 import React from "react";
 import "./App.css";
+import axios from "axios";
 
 export default function App() {
   // Góc nhìn người dùng
@@ -10,7 +11,7 @@ export default function App() {
   // Góc nhìn dev
   // 1. Tạo nút button
   // 2. Gọi API để lấy sản phẩm khi được ấn nút
-  // 3. Lưu dữ liệu và state
+  // 3. Lưu dữ liệu vào state
   // 4. Hiển thị sản phẩm
   const [products, setProducts] = useState([]);
   const [isShow, setIsShow] = useState(false);
@@ -19,12 +20,15 @@ export default function App() {
     async function fetchData() {
       try {
         const response = await fetch("http://localhost:3000/products");
+        // console.log(typeof response);
         console.log(response);
+        if (!response.ok) throw new Error("Có lỗi khi lấy dữ liệu");
+
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setProducts(data);
       } catch (error) {
-        console.log(error);
+        alert(error.message);
       }
     }
     fetchData();
