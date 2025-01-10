@@ -1,5 +1,4 @@
-import { ReactDOM, useEffect, useState } from "react";
-import React from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 
@@ -55,7 +54,7 @@ export default function App() {
             <tbody>
               {products.map((product) => (
                 <Item
-                  key={product.id}
+                  key={product?.id}
                   name={product?.name}
                   price={product?.price}
                 />
