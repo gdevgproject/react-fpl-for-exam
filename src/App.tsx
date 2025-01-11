@@ -27,8 +27,8 @@ export default function App() {
         alert((error as Error).message);
       }
     }
-    fetchData();
-  }, []);
+    if (isShow) fetchData();
+  }, [isShow]);
 
   function showItemHandler() {
     setIsShow(!isShow);
