@@ -12,6 +12,17 @@ export default function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
 
+  //   useForm
+  // register
+  // handleSubmit
+
+  // {...register("name")} takes 2 parameters: primitive and object with key like required: "", min: {value, message}
+
+  // formState: {errors}
+  // example: errors.price, ....
+
+  // className="product-form"
+
   useEffect(() => {
     async function fetchData() {
       try {
