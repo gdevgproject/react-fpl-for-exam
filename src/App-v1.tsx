@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect, useState } from 'react'
+import './App.css'
 
 export default function App() {
   // Góc nhìn người dùng
@@ -11,39 +11,39 @@ export default function App() {
   // 2. Gọi API để lấy sản phẩm khi được ấn nút
   // 3. Lưu dữ liệu vào state
   // 4. Hiển thị sản phẩm
-  const [products, setProducts] = useState([]);
-  const [isShow, setIsShow] = useState(false);
+  const [products, setProducts] = useState([])
+  const [isShow, setIsShow] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3000/products");
+        const response = await fetch('http://localhost:3000/products')
         // console.log(typeof response);
-        console.log(response);
-        if (!response.ok) throw new Error("Có lỗi khi lấy dữ liệu");
+        console.log(response)
+        if (!response.ok) throw new Error('Có lỗi khi lấy dữ liệu')
 
-        const data = await response.json();
+        const data = await response.json()
         // console.log(data);
-        setProducts(data);
+        setProducts(data)
       } catch (error) {
-        alert(error.message);
+        alert(error.message)
       }
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   function showItemHandler() {
-    setIsShow(!isShow);
+    setIsShow(!isShow)
   }
 
   return (
     <>
-      <div className="container">
-        <button className="toggle-btn" onClick={showItemHandler}>
-          {isShow ? "Ẩn sản phẩm" : "Xem sản phẩm"}
+      <div className='container'>
+        <button className='toggle-btn' onClick={showItemHandler}>
+          {isShow ? 'Ẩn sản phẩm' : 'Xem sản phẩm'}
         </button>
         {isShow && (
-          <table className="product-table">
+          <table className='product-table'>
             <thead>
               <tr>
                 <th>Tên sản phẩm</th>
@@ -63,7 +63,7 @@ export default function App() {
         )}
       </div>
     </>
-  );
+  )
 }
 
 function Item({ name, price }) {
@@ -72,5 +72,5 @@ function Item({ name, price }) {
       <td>{name}</td>
       <td>{price}</td>
     </tr>
-  );
+  )
 }

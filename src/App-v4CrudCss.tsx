@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Form, redirect } from 'react-router'
+import { useForm } from 'react-hook-form'
 import './App.css'
 
 interface Product {
@@ -19,11 +19,28 @@ export default function App() {
   const [isShow, setIsShow] = useState<boolean>(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors }
+  } = useForm<ProductFormData>()
+
+  useEffect(() => {
+    if (editingProduct) {
+      setValue('name', editingProduct.name)
+      setValue('price', editingProduct.price)
+    }
+  }, [editingProduct, setValue])
+
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await axios.get('http://localhost:3000/products')
+        console.log(response)
         if (response.status !== 200) throw new Error('Có lỗi khi lấy dữ liệu')
+
         setProducts(response.data)
       } catch (error) {
         alert((error as Error).message)
@@ -31,6 +48,35 @@ export default function App() {
     }
     if (isShow) fetchData()
   }, [isShow])
+
+  const onSubmit = async (data: ProductFormData) => {
+    try {
+      if (editingProduct) {
+        // Update existing product
+        const response = await axios.put(
+          `http://localhost:3000/products/${editingProduct.id}`,
+          data
+        )
+        if (response.status !== 200)
+          throw new Error('Không thể cập nhật sản phẩm')
+        setProducts(
+          products.map((p) => (p.id === editingProduct.id ? response.data : p))
+        )
+        setEditingProduct(null)
+      } else {
+        // Create new product
+        const response = await axios.post(
+          'http://localhost:3000/products',
+          data
+        )
+        if (response.status !== 201) throw new Error('Không thể thêm sản phẩm')
+        setProducts([...products, response.data])
+      }
+      reset()
+    } catch (error) {
+      alert((error as Error).message)
+    }
+  }
 
   const handleDelete = async (id: number) => {
     if (!window.confirm('Bạn có chắc muốn xóa sản phẩm này?')) return
@@ -49,29 +95,32 @@ export default function App() {
   return (
     <>
       <div className='container'>
-        <Form
-          method='post'
-          key={editingProduct ? editingProduct.id : 'new'}
-          className='product-form'
-        >
-          {editingProduct && (
-            <input type='hidden' name='id' defaultValue={editingProduct.id} />
-          )}
+        <form onSubmit={handleSubmit(onSubmit)} className='product-form'>
           <div>
             <input
               type='text'
-              name='name'
               placeholder='Tên sản phẩm'
-              defaultValue={editingProduct?.name || ''}
+              {...register('name', {
+                required: 'Tên sản phẩm là bắt buộc',
+                minLength: { value: 3, message: 'Tên phải có ít nhất 3 ký tự' }
+              })}
             />
+            {errors.name && (
+              <span className='error'>{errors.name.message}</span>
+            )}
           </div>
           <div>
             <input
               type='number'
-              name='price'
               placeholder='Giá sản phẩm'
-              defaultValue={editingProduct?.price || ''}
+              {...register('price', {
+                required: 'Giá sản phẩm là bắt buộc',
+                min: { value: 0, message: 'Giá phải lớn hơn 0' }
+              })}
             />
+            {errors.price && (
+              <span className='error'>{errors.price.message}</span>
+            )}
           </div>
           <button type='submit'>
             {editingProduct ? 'Cập nhật' : 'Thêm sản phẩm'}
@@ -81,13 +130,14 @@ export default function App() {
               type='button'
               onClick={() => {
                 setEditingProduct(null)
+                reset()
               }}
               className='cancel-btn'
             >
               Hủy
             </button>
           )}
-        </Form>
+        </form>
 
         <button className='toggle-btn' onClick={showItemHandler}>
           {isShow ? 'Ẩn sản phẩm' : 'Xem sản phẩm'}
@@ -117,33 +167,6 @@ export default function App() {
       </div>
     </>
   )
-}
-
-export async function productAction({ request }: { request: Request }) {
-  const formData = await request.formData()
-  const name = formData.get('name') as string
-  const price = Number(formData.get('price'))
-  const id = formData.get('id')
-  try {
-    if (id) {
-      const response = await axios.put(`http://localhost:3000/products/${id}`, {
-        name,
-        price
-      })
-      if (response.status !== 200)
-        throw new Error('Không thể cập nhật sản phẩm')
-    } else {
-      const response = await axios.post('http://localhost:3000/products', {
-        name,
-        price
-      })
-      if (response.status !== 201) throw new Error('Không thể thêm sản phẩm')
-    }
-    return redirect('/')
-  } catch (error) {
-    alert((error as Error).message)
-    return null
-  }
 }
 
 interface ItemProps {
