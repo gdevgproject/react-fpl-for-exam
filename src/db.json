@@ -1,54 +1,35 @@
 {
-  "products": [
-    {
-      "name": "Khẩu trang",
-      "price": 50009,
-      "id": "1"
-    },
-    {
-      "name": "Màn hình",
-      "price": "2000000",
-      "id": "2"
-    },
-    {
-      "name": "Bàn",
-      "price": "500000",
-      "id": "3"
-    },
-    {
-      "name": "Chuột",
-      "price": "250000",
-      "id": "d24c"
-    },
-    {
-      "name": "Ghế",
-      "price": "400000",
-      "id": "7f17"
-    },
-    {
-      "id": "11b8",
-      "name": "d",
-      "price": "2"
-    },
-    {
-      "id": "7c66",
-      "name": "Minh user",
-      "price": "333"
-    },
-    {
-      "id": "3ea6",
-      "name": "iphone",
-      "price": "20000000"
-    },
-    {
-      "id": "7b1e",
-      "name": "laptop",
-      "price": "30000"
-    },
-    {
-      "id": "9d50",
-      "name": "Samsung a54",
-      "price": "10000000"
-    }
-  ]
-}
+
+    "warranties": [
+  
+      {
+  
+        "id": 1,
+  
+        "name": "Nguyễn Văn A",
+  
+        "phone": "0909123456",
+  
+        "product": "Máy giặt",
+  
+        "installDate": "2023-09-01"
+  
+      }
+  
+    ],
+  
+    "users": [
+  
+      {
+  
+        "id": 1,
+  
+        "username": "admin",
+  
+        "password": "admin"
+  
+      }
+  
+    ]
+  
+  }
